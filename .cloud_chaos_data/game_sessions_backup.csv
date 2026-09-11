@@ -1,0 +1,5 @@
+session_id,player_id,name,company,score,time_used,timed_out,is_perfect,completed_at
+4,4,Cloud Trainee,ceva,3,19,0,0,2026-09-11 14:05:50.197942
+3,3,Syed,123,2,21,0,0,2026-09-11 14:00:42.305795
+2,2,Cloud Trainee,qwrewqewq,3,60,0,0,2026-09-11 13:08:40.871629
+1,1,Syed,Rapyder,3,16,0,0,2026-09-11 13:01:25.244802
