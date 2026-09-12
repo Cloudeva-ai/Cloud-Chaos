@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Local configuration and secrets
+.streamlit/secrets.toml
+.env
+.env.*
+!.env.example
+
+# Runtime data and generated artifacts
+.cloud_chaos_data/
+*.db
+*.db-wal
+*.db-shm
+*.csv
+*.xlsx
+*.log
+
+# Local tooling
+.vscode/

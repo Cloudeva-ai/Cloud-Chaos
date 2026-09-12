@@ -40,6 +40,8 @@ def build_breakdown(selections: dict[int, dict[str, bool | None]]) -> list[dict]
 
 def get_result_tier(score: int) -> dict:
     """Map a score to the display tier shown on the results screen."""
+    if score < 0 or score > NUM_PAINS:
+        raise ValueError(f"Score must be between 0 and {NUM_PAINS}.")
     missed = NUM_PAINS - score
     if score == NUM_PAINS:
         return {
@@ -88,11 +90,11 @@ def get_result_tier(score: int) -> dict:
     }
 
 
-RANK_MEDALS = {0: "🥇", 1: "🥈", 2: "🥉"}
+RANK_LABELS = {0: "1", 1: "2", 2: "3"}
 
 
 def format_rank(idx: int) -> str:
-    return RANK_MEDALS.get(idx, str(idx + 1))
+    return RANK_LABELS.get(idx, str(idx + 1))
 
 
 def format_time(seconds: int) -> str:

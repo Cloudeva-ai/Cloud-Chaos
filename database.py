@@ -44,7 +44,8 @@ from sqlalchemy import (
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import DeclarativeBase, relationship, sessionmaker
 
-from game_data import NUM_PAINS
+from game_data import GAME_DURATION, NUM_PAINS
+from game_engine import calculate_score
 
 # ─────────────────────────────────────────────────────────────
 #  ENGINE SETUP
@@ -471,12 +472,25 @@ def _validate_event_payload(payload: str) -> str:
 
 
 def _write_df_atomically(df: pd.DataFrame, excel_path: Path, csv_path: Path, *, sheet_name: str) -> None:
+    df = _sanitize_spreadsheet_values(df)
     temp_excel_path = excel_path.with_suffix(".tmp.xlsx")
     temp_csv_path = csv_path.with_suffix(".tmp.csv")
     df.to_excel(temp_excel_path, index=False, sheet_name=sheet_name)
     df.to_csv(temp_csv_path, index=False)
     os.replace(temp_excel_path, excel_path)
     os.replace(temp_csv_path, csv_path)
+
+
+def _sanitize_spreadsheet_values(df: pd.DataFrame) -> pd.DataFrame:
+    """Prevent user-entered strings from becoming spreadsheet formulas."""
+    sanitized = df.copy()
+
+    def sanitize(value: Any) -> Any:
+        if isinstance(value, str) and value.startswith(("=", "+", "-", "@")):
+            return "'" + value
+        return value
+
+    return sanitized.map(sanitize)
 
 
 def _read_csv_if_exists(csv_path: Path, columns: list[str]) -> pd.DataFrame:
@@ -633,8 +647,9 @@ def _export_registration_backup(
             snapshot_stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
             snapshot_excel_path = REGISTRATION_BACKUP_DIR / f"player_registrations_{snapshot_stamp}.xlsx"
             snapshot_csv_path = REGISTRATION_BACKUP_DIR / f"player_registrations_{snapshot_stamp}.csv"
-            df.to_excel(snapshot_excel_path, index=False, sheet_name="registrations")
-            df.to_csv(snapshot_csv_path, index=False)
+            safe_df = _sanitize_spreadsheet_values(df)
+            safe_df.to_excel(snapshot_excel_path, index=False, sheet_name="registrations")
+            safe_df.to_csv(snapshot_csv_path, index=False)
             _last_snapshot_export_at = time.monotonic()
 
 
@@ -1071,17 +1086,26 @@ def save_game_session(
     """
     if score < 0:
         raise ValueError("Score cannot be negative.")
+    if score > NUM_PAINS:
+        raise ValueError(f"Score cannot exceed {NUM_PAINS}.")
     if time_used < 0:
         raise ValueError("Time used cannot be negative.")
+    if time_used > GAME_DURATION:
+        raise ValueError("Time used cannot exceed the game duration.")
     if not selections:
         raise ValueError("Selections are required.")
     for pain_idx, selection in selections.items():
         if pain_idx < 0:
             raise ValueError("Pain index cannot be negative.")
+        if pain_idx >= NUM_PAINS:
+            raise ValueError("Pain index is outside the game.")
         if not isinstance(selection, dict):
             raise ValueError("Each selection must be a dictionary.")
         if "answer" not in selection:
             raise ValueError("Each selection must include an answer key.")
+    calculated_score = calculate_score(selections)
+    if score != calculated_score:
+        raise ValueError("Score does not match the submitted answers.")
 
     # Retry logic for transient I/O errors
     max_retries = 3
@@ -1104,7 +1128,7 @@ def save_game_session(
 
                 for pain_idx, sel in selections.items():
                     answer = sel.get("answer")
-                    is_correct = bool(sel.get("is_correct"))
+                    is_correct = bool(sel.get("answer") is not None and sel.get("is_correct"))
                     db.add(Selection(
                         session_id      = session.id,
                         pain_idx        = pain_idx,
@@ -1343,6 +1367,10 @@ def export_admin_workbook() -> Path:
         "avg_score": stats.get("avg_score", 0.0),
     }])
     pain_accuracy_df = pd.DataFrame(stats.get("pain_accuracy", []))
+    registrations_df = _sanitize_spreadsheet_values(registrations_df)
+    sessions_df = _sanitize_spreadsheet_values(sessions_df)
+    stats_df = _sanitize_spreadsheet_values(stats_df)
+    pain_accuracy_df = _sanitize_spreadsheet_values(pain_accuracy_df)
 
     temp_path = ADMIN_EXPORT_PATH.with_suffix(".tmp.xlsx")
     with BACKUP_LOCK:

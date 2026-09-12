@@ -1,4 +1,14 @@
 session_id,player_id,name,company,score,time_used,timed_out,is_perfect,completed_at
+14,19,Flags User,Validation Company,6,10,0,1,2026-09-12 08:38:49.328151
+13,16,Clip QA,Local Test,6,74,0,1,2026-09-12 08:11:53.878719
+12,15,arya test 1,test 1,4,26,0,0,2026-09-12 08:10:36.052777
+11,14,Mobile Results QA,Local Test,0,3,1,0,2026-09-12 08:08:37.084405
+10,13,Results Layout QA,Local Test,0,3,1,0,2026-09-12 08:08:27.289437
+9,12,Timeout Browser QA,Local Test,0,3,1,0,2026-09-12 08:07:11.495669
+8,8,Perfect Browser QA,Local Test,0,90,1,0,2026-09-12 08:00:35.977323
+7,7,ASCII Browser QA,Local Test,4,17,0,0,2026-09-12 07:52:15.977184
+6,6,Browser QA 2,Local Test,4,33,0,0,2026-09-12 07:51:13.050178
+5,5,Browser QA,Local Test,4,47,0,0,2026-09-12 07:50:23.109846
 4,4,Cloud Trainee,ceva,3,19,0,0,2026-09-11 14:05:50.197942
 3,3,Syed,123,2,21,0,0,2026-09-11 14:00:42.305795
 2,2,Cloud Trainee,qwrewqewq,3,60,0,0,2026-09-11 13:08:40.871629
