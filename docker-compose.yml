@@ -1,0 +1,15 @@
+services:
+  cloud-chaos:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      CLOUD_CHAOS_DATA_DIR: /app/.cloud_chaos_data
+      DATABASE_URL: ${DATABASE_URL:-}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:?Set ADMIN_USERNAME before starting Docker}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD before starting Docker}
+    volumes:
+      - cloud-chaos-data:/app/.cloud_chaos_data
+
+volumes:
+  cloud-chaos-data:

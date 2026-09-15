@@ -6,6 +6,7 @@ The player judges whether the combination is right or wrong.
 
 from __future__ import annotations
 
+import os
 import random
 
 CARDS = [
@@ -48,9 +49,9 @@ CARDS = [
 ]
 
 PAIN_COLORS = ["#FF6B6B", "#023C57", "#06C2AC", "#0EA5E9", "#14B8A6", "#38BDF8"]
-PAIN_LABELS = [f"CARD #{idx + 1}" for idx in range(len(CARDS))]
+PAIN_LABELS = [f"Card {idx + 1}" for idx in range(len(CARDS))]
 NUM_PAINS = len(CARDS)
-GAME_DURATION = 90
+GAME_DURATION = int(os.getenv("CLOUD_CHAOS_GAME_DURATION", "90"))
 
 
 def get_shuffled_cards() -> list[dict[str, object]]:
