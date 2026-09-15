@@ -89,7 +89,7 @@ def register():
           problem is paired with the right impact and owner.</p>
           <div class="challenge-facts"><div><strong>{gd.GAME_DURATION}s</strong><span>on the clock</span></div>
           <div><strong>{gd.NUM_PAINS} cards</strong><span>right or wrong</span></div>
-          <div><strong>3 winners</strong><span>smartwatch prizes</span></div></div></section>''')
+          <div><strong>3 winners</strong><span>gift hamper prizes</span></div></div></section>''')
     with right:
         mascot("hero-mascot")
         with st.form("register_form", border=True):
@@ -112,10 +112,10 @@ def register():
                 adopt(state)
                 st.query_params["attempt"] = state["token"]
                 go("game")
-    render_html(f'''<aside class="prize-strip"><div class="prize-intro">{icon('trophy')}<strong>Up for grabs</strong></div>
-      <video autoplay muted loop playsinline preload="metadata" aria-label="Smartwatch prize">
-      <source src="app/static/Smartwatch%203d.mp4" type="video/mp4"></video>
-      <div><strong>Smartwatch</strong><p>3 winners - announced at the event</p></div></aside>''')
+    render_html(f'''<aside class="prize-strip"><div class="prize-intro">{icon('redeem')}<strong>Up for grabs</strong></div>
+      <img src="app/static/luxury-gift-box-with-gold-bow-and-money-2026-03-19-04-29-59-utc.jpg"
+        alt="Gift hamper prize" style="width:90px;height:76px;object-fit:cover;border-radius:12px;flex-shrink:0">
+      <div><strong>Gift Hampers</strong><p>3 winners - announced at the event</p></div></aside>''')
     nav, admin_col = st.columns([3, 1])
     if nav.button("View Leaderboard", icon=":material/leaderboard:", key="reg_lb_btn", use_container_width=True):
         go("leaderboard")
