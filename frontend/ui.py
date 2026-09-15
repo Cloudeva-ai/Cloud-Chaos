@@ -118,7 +118,7 @@ def video_markup(path: Path, *, height_px: int = 140) -> str:
     if not path.exists():
         return (
             f"<div style='height:{height_px}px;display:flex;align-items:center;"
-            f"justify-content:center;color:var(--muted)'>Smartwatch</div>"
+            f"justify-content:center;color:var(--muted)'>Gift Hampers</div>"
         )
     video_src = video_data_uri(str(path))
     video_type = "video/quicktime" if path.suffix.lower() == ".mov" else "video/mp4"

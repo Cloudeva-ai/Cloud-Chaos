@@ -10,7 +10,7 @@ The registration, game and results/leaderboard concept PNGs record the visual di
 - `static/mascot-idle.png`: first-frame poster for the video.
 - `static/fonts/`: self-hosted Manrope weights and their OFL license.
 
-The shipped video does not need an API or generation service at runtime. The header motion control pauses video and CSS animation; the initial state honors the system reduced-motion preference. The original smartwatch media and external registration destination are retained.
+The shipped video does not need an API or generation service at runtime. The header motion control pauses video and CSS animation; the initial state honors the system reduced-motion preference. The gift hamper prize image and external registration destination are retained.
 
 ## Theme
 
