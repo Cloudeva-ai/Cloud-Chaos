@@ -113,7 +113,7 @@ def register():
                 st.query_params["attempt"] = state["token"]
                 go("game")
     render_html(f'''<aside class="prize-strip"><div class="prize-intro">{icon('redeem')}<strong>Up for grabs</strong></div>
-      <img src="app/static/luxury-gift-box-with-gold-bow-and-money-2026-03-19-04-29-59-utc.jpg"
+      <img src="app/static/hampers.svg"
         alt="Gift hamper prize" style="width:90px;height:76px;object-fit:cover;border-radius:12px;flex-shrink:0">
       <div><strong>Gift Hampers</strong><p>3 winners - announced at the event</p></div></aside>''')
     nav, admin_col = st.columns([3, 1])
